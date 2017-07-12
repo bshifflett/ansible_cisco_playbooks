@@ -1,0 +1,31 @@
+---
+- name: Set Firewalls to use standard NTP servers
+  connection: local
+  hosts: firewalls
+  gather_facts: false
+  vars:
+    cli:
+      username: "{{ username }}"
+      password: "{{ password }}"
+      host: "{{ device_ip }}"
+      authorize: yes
+      auth_pass: "{{ secret }}"
+  tasks:
+    - name: Define NTP settings for clock
+      asa_config:
+        lines:
+           - clock summer-time {{ summer_timezone }} recurring 2 Sun Mar 2:00 1 Sun Nov 2:00
+           - clock timezone {{ timezone }} {{ offset_timezone }}
+           - ntp server 128.138.140.44
+#           - ntp server 216.218.192.202
+           - ntp server 216.218.192.202 prefer
+        provider: "{{ cli }}"
+
+#   - name: Show NTP running config
+#      asa_command:
+#        commands:
+#          - show run ntp
+#        provider: "{{ cli }}"
+#      register: ntp_settings
+
+#    - debug: var=ntp_settings.stdout_lines[0]

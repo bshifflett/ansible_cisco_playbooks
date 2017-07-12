@@ -1,0 +1,46 @@
+- name: Cisco ASA setup netflow on ASA for Logicmonitor
+  connection: local
+  hosts: firewalls
+  gather_facts: false
+  vars:
+    cli:
+      username: "{{ username }}"
+      password: "{{ password }}"
+      host: "{{ device_ip }}"
+      authorize: yes
+      auth_pass: "{{ secret }}"
+  tasks:
+#    - name: Remove old flow-export in Policy map global_policy
+#      asa_config:
+#        lines:
+#          - no flow-export event-type all destination
+#        parents: ['policy-map gloval_policy', 'class global-class']
+#        provider: "{{ cli }}"
+ 
+    - name: Setup Netflow Export Destination
+      asa_config:
+        lines:
+          - flow-export destination {{ inside_name }} {{ lm_collector }} {{ lm_port }}
+          - flow-export template timeout-rate 1
+        provider: "{{ cli }}"
+
+    - name: Setup global class in Policy map for Netflow export
+      asa_config:
+        lines:
+          - match any
+        parents: ['class global-class']
+        provider: "{{ cli }}"
+
+    - name: Setup flow-export in Policy map global_policy
+      asa_config:
+        lines:
+          - flow-export event-type all destination {{ lm_collector }}
+        parents: ['policy-map global_policy', 'class global-class']
+        provider: "{{ cli }}"
+
+    - name: Running command WR MEM to save running configuration
+      asa_command:
+        commands:
+          - wr mem
+        provider: "{{ cli }}"
+      register: config

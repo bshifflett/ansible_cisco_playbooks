@@ -1,0 +1,7 @@
+---
+- name: ASA show version
+  asa_command:
+    commands:
+        - show ver
+    provider: "{{ cli }}"
+  register: sh_ver

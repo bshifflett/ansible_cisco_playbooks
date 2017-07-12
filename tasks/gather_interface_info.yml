@@ -1,0 +1,11 @@
+---
+tasks:
+     - name: show interface
+       ios_facts:
+        host: "{{inventory_hostname}}"
+<<<<<<< HEAD
+        gather_subset: all
+=======
+        gather_subset: "interfaces"
+>>>>>>> bae683f0c13e75b386d38009fc369f40f8159f40
+        provider: "{{ cli }}"

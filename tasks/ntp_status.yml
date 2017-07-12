@@ -1,0 +1,22 @@
+---
+    - name: Show NTP status
+      asa_command:
+        commands:
+           - show ntp status
+        provider: "{{ cli }}"
+      register: ntp_status
+    - name: Show NTP Associations
+      asa_command:
+        commands:
+           - show ntp assoc
+        provider: "{{ cli }}"
+      register: ntp_assoc
+    - name: Show Clock
+      asa_command:
+        commands:
+           - show clock
+        provider: "{{ cli }}"
+      register: clock_status
+    - debug: var=ntp_status.stdout_lines[0]
+    - debug: var=clock_status.stdout_lines[0]
+    - debug: var=ntp_assoc.stdout_lines[0]

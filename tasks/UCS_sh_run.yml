@@ -1,0 +1,12 @@
+---
+- name: show run of UCS
+  ios_command:
+    commands:
+        - show run
+    provider: "{{ cli }}"
+  register: sh_run
+      
+- name: save output to /home/ansible/config-backups/client-backup-configs/
+  copy:
+      content: "{{ sh_run.stdout[0] }}"
+      dest: "/home/ansible/config-backups/client-backup-configs/{{ companyname }}/{{ inventory_hostname }}.txt"

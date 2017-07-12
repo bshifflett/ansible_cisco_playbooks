@@ -1,0 +1,13 @@
+---
+- name: ssh restrictions and version of SSH
+  asa_config:
+    lines:
+      - ssh 142.254.102.66 255.255.255.240 "{{ wan_name }}"
+      - ssh 38.102.138.21 255.255.255.248 "{{ wan_name }}"
+      - ssh 142.254.102.66 255.255.255.240 "{{ wan_backup_name }}"
+      - ssh 38.102.138.21 255.255.255.248 "{{ wan_backup_name }}"
+      - ssh version 2 
+      - ssh 0.0.0.0 0.0.0.0 "{{ inside_name }}"
+      - no ssh 0.0.0.0 0.0.0.0 "{{ wan_name }}"
+      - no ssh 0.0.0.0 0.0.0.0 "{{ backup_wan_name }}"
+    provider: "{{ cli }}"

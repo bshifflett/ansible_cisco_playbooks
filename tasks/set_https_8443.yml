@@ -1,0 +1,9 @@
+---
+- name: Https enable on port 8433
+  asa_config:
+    lines:
+      - http server enable 8443
+      - http 0.0.0.0 0.0.0.0 "{{ wan_name }}"
+      - http 0.0.0.0 0.0.0.0 "{{ backup_wan_name }}"
+      - http 0.0.0.0 0.0.0.0 "{{ inside_name }}"
+    provider: "{{ cli }}"

@@ -1,0 +1,7 @@
+---
+- name: Define SNMP contact Info & SNMP-server community
+  asa_config:
+    lines:
+      - snmp-server contact Micromenders 415-808-0600
+      - snmp-server host "{{ inside_name }}" "{{ snmp_srv }}" community "{{ snmp_community }}"
+    provider: "{{ cli }}"

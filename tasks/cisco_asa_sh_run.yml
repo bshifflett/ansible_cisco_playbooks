@@ -1,0 +1,7 @@
+---
+- name: ASA show running config
+  asa_command:
+    commands:
+        - show run
+    provider: "{{ cli }}"
+  register: sh_run

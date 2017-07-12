@@ -1,0 +1,16 @@
+- name: Backup Cisco Switches and Phone Systems
+  connection: local
+  hosts: switches
+  gather_facts: false
+  vars:
+    cli:
+      username: "{{ username }}"
+      password: "{{ password }}"
+      host: "{{ device_ip }}"
+      authorize: yes
+      auth_pass: "{{ secret }}"
+      port: "{{ ansible_port }}"
+  tasks:
+    - { include: /etc/ansible/cisco_playbooks/tasks/cisco_sg_sh_run.yml, when: "switch_model == 'cisco-sg'" }
+    - { include: /etc/ansible/cisco_playbooks/tasks/cisco_sw_sh_run.yml, when: "switch_model == 'cisco-sw'" }
+    - { include: /etc/ansible/cisco_playbooks/tasks/UCS_sh_run.yml, when: "switch_model == 'cisco-ucs'" }

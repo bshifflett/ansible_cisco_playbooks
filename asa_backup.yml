@@ -1,0 +1,29 @@
+- name: Cisco ASA Backup Running Configs
+  connection: local
+  hosts: [firewalls]
+  gather_facts: false
+  vars:
+    cli:
+      username: "{{ username }}"
+      password: "{{ password }}"
+      host: "{{ device_ip }}"
+      authorize: yes
+      auth_pass: "{{ secret }}"
+  tasks:
+    - name:  Run config command Pager 0 to eliminate breaks in showing run
+      asa_config:
+        lines:
+          - pager 0
+        provider: "{{ cli }}"
+
+    - name:  Run Command sh run
+      asa_command:
+        commands:
+          - show run
+        provider: "{{ cli }}"
+      register: config
+
+    - name: save Running Config  to backup location /home/ansible/config-backups/client-backup-configs/company_name/
+      copy:
+        content: "{{ config.stdout[0] }}"
+        dest: "/home/ansible/config-backups/client-backup-configs/{{ companyname }}/{{ inventory_hostname }}.txt"

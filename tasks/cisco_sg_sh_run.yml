@@ -1,0 +1,13 @@
+---
+- name: show running config on Cisco SG Series Switches
+  ios_command:
+    commands:
+      - terminal datadump
+      - show run
+    provider: "{{ cli }}"
+  register: config
+  
+- name: save Config to /home/ansible/config-backups/client-backup-configs/
+  copy:
+      content: "{{ config.stdout[1] }}"
+      dest: "/home/ansible/config-backups/client-backup-configs/{{ companyname }}/{{ inventory_hostname }}.txt"

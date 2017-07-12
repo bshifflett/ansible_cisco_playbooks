@@ -1,0 +1,12 @@
+---
+- name: show running config on Cisco IOS Switches
+  ios_command:
+    commands:
+      - show run
+    provider: "{{ cli }}"
+  register: config
+
+- name: save switch config to /home/ansible/config-backups/client-backup-configs/
+  copy:
+      content: "{{ config.stdout[0] }}"
+      dest: "/home/ansible/config-backups/client-backup-configs/{{ companyname }}/{{ inventory_hostname }}.txt"
